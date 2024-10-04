@@ -2,9 +2,10 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import numpy as np
 
-day_df = pd.read_csv('./Data/day.csv')
-hour_df = pd.read_csv('./Data/hour.csv')
+day_df = pd.read_csv('../Data/day.csv')
+hour_df = pd.read_csv('../Data/hour.csv')
 
 # Preprocessing
 day_df.dropna(inplace=True)
@@ -87,10 +88,22 @@ ax.legend(labels=['Clear', 'Cloudy', 'Rain/Snow'], title='Weather Condition')
 ax.set_ylabel('Bike Rentals')
 st.pyplot(fig)
 
-# # Display DataFrame head
-# st.subheader('First 10 Rows of Day DataFrame')
-# st.write(filtered_day_df.head(10))
-#
-# # Display DataFrame head of hourly data
-# st.subheader('First 10 Rows of Hour DataFrame')
-# st.write(hour_df.head(10))
+# Visualization: Rata-rata Penyewaan Sepeda pada Hari Kerja vs Hari Libur
+st.subheader('Rata-rata Penyewaan Sepeda pada Hari Kerja vs Hari Libur')
+fig, ax = plt.subplots()
+workingday_mean = filtered_day_df.groupby('workingday')['cnt'].mean()
+ax.bar(workingday_mean.index, workingday_mean.values)
+ax.set_title('Rata-rata Penyewaan Sepeda pada Hari Kerja vs Hari Libur')
+ax.set_xlabel('0 = Hari Libur, 1 = Hari Kerja')
+ax.set_ylabel('Rata-rata Penyewaan Sepeda')
+st.pyplot(fig)
+
+# Visualization: Rata-rata Penyewaan Sepeda Berdasarkan Musim
+st.subheader('Rata-rata Penyewaan Sepeda Berdasarkan Musim')
+fig, ax = plt.subplots()
+season_mean = filtered_day_df.groupby('season')['cnt'].mean()
+ax.bar(season_mean.index, season_mean.values)
+ax.set_title('Rata-rata Penyewaan Sepeda Berdasarkan Musim')
+ax.set_xlabel('Musim (1 = Winter, 2 = Spring, 3 = Summer, 4 = Fall)')
+ax.set_ylabel('Rata-rata Penyewaan Sepeda')
+st.pyplot(fig)
