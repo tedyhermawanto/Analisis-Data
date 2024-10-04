@@ -89,21 +89,19 @@ ax.set_ylabel('Bike Rentals')
 st.pyplot(fig)
 
 # Visualization: Rata-rata Penyewaan Sepeda pada Hari Kerja vs Hari Libur
-st.subheader('Rata-rata Penyewaan Sepeda pada Hari Kerja vs Hari Libur')
+st.subheader('Average Bike Rentals on Weekdays vs Holidays')
 fig, ax = plt.subplots()
 workingday_mean = filtered_day_df.groupby('workingday')['cnt'].mean()
 ax.bar(workingday_mean.index, workingday_mean.values)
-ax.set_title('Rata-rata Penyewaan Sepeda pada Hari Kerja vs Hari Libur')
 ax.set_xlabel('0 = Hari Libur, 1 = Hari Kerja')
 ax.set_ylabel('Rata-rata Penyewaan Sepeda')
 st.pyplot(fig)
 
 # Visualization: Rata-rata Penyewaan Sepeda Berdasarkan Musim
-st.subheader('Rata-rata Penyewaan Sepeda Berdasarkan Musim')
+st.subheader('Average Bike Rentals by Season')
 fig, ax = plt.subplots()
 season_mean = filtered_day_df.groupby('season')['cnt'].mean()
 ax.bar(season_mean.index, season_mean.values)
-ax.set_title('Rata-rata Penyewaan Sepeda Berdasarkan Musim')
 ax.set_xlabel('Musim (1 = Winter, 2 = Spring, 3 = Summer, 4 = Fall)')
 ax.set_ylabel('Rata-rata Penyewaan Sepeda')
 st.pyplot(fig)
