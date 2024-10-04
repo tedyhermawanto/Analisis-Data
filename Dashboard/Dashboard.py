@@ -99,7 +99,3 @@ ax.bar(season_mean.index, season_mean.values)
 ax.set_xlabel('Musim (1 = Winter, 2 = Spring, 3 = Summer, 4 = Fall)')
 ax.set_ylabel('Rata-rata Penyewaan Sepeda')
 st.pyplot(fig)
-
-ax.set_xticks([1, 2, 3, 4])
-ax.set_xticklabels(['Winter', 'Spring', 'Summer', 'Fall'])
-st.pyplot(fig)
