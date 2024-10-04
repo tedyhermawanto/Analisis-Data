@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 
-day_df = pd.read_csv('../Data/day.csv')
-hour_df = pd.read_csv('../Data/hour.csv')
+day_df = pd.read_csv('./Data/day.csv')
+hour_df = pd.read_csv('./Data/hour.csv')
 
 # Preprocessing
 day_df.dropna(inplace=True)
