@@ -3,7 +3,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
+import plotly.express as px
 
+# Load data
 day_df = pd.read_csv('./Data/day.csv')
 hour_df = pd.read_csv('./Data/hour.csv')
 
@@ -35,77 +37,56 @@ correlation_matrix = filtered_day_df[numerical_columns].corr()
 st.subheader('Correlation Matrix')
 st.write(correlation_matrix)
 
+# 1. Trend of Bike Rentals Over Time
 st.subheader('Trend of Bike Rentals Over Time')
-fig, ax = plt.subplots()
-sns.lineplot(x='date', y='cnt', data=filtered_day_df, ax=ax)
-ax.set_title(f'Daily Bike Rentals')
-ax.set_xlabel('Date')
-ax.set_ylabel('Number of Rentals')
-plt.xticks(rotation=45)
-st.pyplot(fig)
+fig = px.line(filtered_day_df, x='date', y='cnt',
+              labels={'date': 'Date', 'cnt': 'Number of Rentals'},
+              title='Daily Bike Rentals')
+st.plotly_chart(fig)
 
-# Visualization 1: Temperature vs Bike Rentals
+# 2. Temperature vs Bike Rentals
 st.subheader('Temperature vs Bike Rentals')
-fig, ax = plt.subplots()
-sns.scatterplot(x='temp', y='cnt', data=filtered_day_df, ax=ax)
-ax.set_title('Temperature vs Bike Rentals')
-ax.set_xlabel('Temperature (Normalized)')
-ax.set_ylabel('Bike Rentals')
-st.pyplot(fig)
+fig = px.scatter(filtered_day_df, x='temp', y='cnt',
+                 labels={'temp': 'Temperature (Normalized)', 'cnt': 'Bike Rentals'},
+                 title='Temperature vs Bike Rentals')
+st.plotly_chart(fig)
 
-# Visualization 2: Humidity vs Bike Rentals
+# 3. Humidity vs Bike Rentals
 st.subheader('Humidity vs Bike Rentals')
-fig, ax = plt.subplots()
-sns.scatterplot(x='hum', y='cnt', data=filtered_day_df, ax=ax)
-ax.set_title('Humidity vs Bike Rentals')
-ax.set_xlabel('Humidity (Normalized)')
-ax.set_ylabel('Bike Rentals')
-st.pyplot(fig)
+fig = px.scatter(filtered_day_df, x='hum', y='cnt',
+                 labels={'hum': 'Humidity (Normalized)', 'cnt': 'Bike Rentals'},
+                 title='Humidity vs Bike Rentals')
+st.plotly_chart(fig)
 
-# Visualization 3: Windspeed vs Bike Rentals
+# 4. Windspeed vs Bike Rentals
 st.subheader('Windspeed vs Bike Rentals')
-fig, ax = plt.subplots()
-sns.scatterplot(x='windspeed', y='cnt', data=filtered_day_df, ax=ax)
-ax.set_title('Windspeed vs Bike Rentals')
-ax.set_xlabel('Windspeed (Normalized)')
-ax.set_ylabel('Bike Rentals')
-st.pyplot(fig)
+fig = px.scatter(filtered_day_df, x='windspeed', y='cnt',
+                 labels={'windspeed': 'Windspeed (Normalized)', 'cnt': 'Bike Rentals'},
+                 title='Windspeed vs Bike Rentals')
+st.plotly_chart(fig)
 
-# Boxplot: Effect of weather conditions on bike rentals
+# 5. Boxplot: Effect of weather conditions on bike rentals
 st.subheader('Effect of Weather Conditions on Bike Rentals')
-fig, ax = plt.subplots()
+fig = px.box(filtered_day_df, x='weathersit', y='cnt',
+             labels={'weathersit': 'Weather Condition', 'cnt': 'Bike Rentals'},
+             title='Bike Rentals under Different Weather Conditions',
+             color='weathersit')
+fig.update_xaxes(tickvals=[1, 2, 3], ticktext=['Clear', 'Cloudy', 'Rain/Snow'])
+st.plotly_chart(fig)
 
-# Menentukan warna berbeda untuk setiap kategori 'weathersit'
-palette = {'1': 'steelblue', '2': 'skyblue', '3': 'lightblue'}
-
-# Membuat boxplot dengan palette warna yang ditentukan
-sns.boxplot(x='weathersit', y='cnt', data=filtered_day_df, ax=ax, palette=palette)
-
-# Menambahkan keterangan pada sumbu X
-ax.set_title('Bike Rentals under Different Weather Conditions')
-ax.set_xlabel('Weather Condition')
-ax.legend(labels=['Clear', 'Cloudy', 'Rain/Snow'], title='Weather Condition')
-ax.set_ylabel('Bike Rentals')
-st.pyplot(fig)
-
-# Visualization: Rata-rata Penyewaan Sepeda pada Hari Kerja vs Hari Libur
+# 6. Average Bike Rentals on Weekdays vs Holidays
 st.subheader('Average Bike Rentals on Weekdays vs Holidays')
-fig, ax = plt.subplots()
-workingday_mean = filtered_day_df.groupby('workingday')['cnt'].mean()
-ax.bar(workingday_mean.index, workingday_mean.values)
-ax.set_xlabel('0 = Hari Libur, 1 = Hari Kerja')
-ax.set_ylabel('Rata-rata Penyewaan Sepeda')
-st.pyplot(fig)
+workingday_mean = filtered_day_df.groupby('workingday')['cnt'].mean().reset_index()
+fig = px.bar(workingday_mean, x='workingday', y='cnt',
+             labels={'workingday': 'Hari (0 = Hari Libur, 1 = Hari Kerja)', 'cnt': 'Rata-rata Penyewaan Sepeda'},
+             title='Average Bike Rentals on Weekdays vs Holidays')
+st.plotly_chart(fig)
 
-# Visualization: Rata-rata Penyewaan Sepeda Berdasarkan Musim
+# 7. Average Bike Rentals by Season
 st.subheader('Average Bike Rentals by Season')
-fig, ax = plt.subplots()
-season_mean = filtered_day_df.groupby('season')['cnt'].mean()
-ax.bar(season_mean.index, season_mean.values)
-ax.set_xlabel('Musim (1 = Winter, 2 = Spring, 3 = Summer, 4 = Fall)')
-ax.set_ylabel('Rata-rata Penyewaan Sepeda')
-st.pyplot(fig)
-
-ax.set_xticks([1, 2, 3, 4])
-ax.set_xticklabels(['Winter', 'Spring', 'Summer', 'Fall'])
-st.pyplot(fig)
+season_mean = filtered_day_df.groupby('season')['cnt'].mean().reset_index()
+fig = px.bar(season_mean, x='season', y='cnt',
+             labels={'season': 'Musim (1 = Winter, 2 = Spring, 3 = Summer, 4 = Fall)', 'cnt': 'Rata-rata Penyewaan Sepeda'},
+             title='Average Bike Rentals by Season')
+fig.update_xaxes(tickvals=[1, 2, 3, 4], ticktext=['Winter', 'Spring', 'Summer', 'Fall'])
+st.plotly_chart(fig)
